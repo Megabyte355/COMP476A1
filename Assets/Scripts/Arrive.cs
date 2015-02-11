@@ -19,7 +19,7 @@ public class Arrive : MonoBehaviour
 
     void KinematicArrive()
     {
-        Vector3 direction = (target.position - transform.position);
+        Vector3 direction = target.position - transform.position;
         if(direction.magnitude <= npc.DistanceThreshold)
         {
             // Step directly to target (behavior A.i)
@@ -29,7 +29,7 @@ public class Arrive : MonoBehaviour
         {
             if(Vector3.Angle (transform.forward, direction) <= npc.AngleThreshold)
             {
-                transform.Translate (direction.normalized * npc.ArriveSpeed * Time.deltaTime);
+                transform.Translate (direction.normalized * npc.ArriveSpeed * Time.deltaTime, Space.World);
             }
             else
             {

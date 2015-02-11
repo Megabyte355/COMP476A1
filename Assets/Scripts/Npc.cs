@@ -21,4 +21,5 @@ public class Npc : MonoBehaviour
 
     // Kinematic flee
     public float FleeSpeed;
+    public float FleeDistanceThreshold;
 }
