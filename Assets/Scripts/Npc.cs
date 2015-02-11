@@ -21,17 +21,4 @@ public class Npc : MonoBehaviour
 
     // Kinematic flee
     public float FleeSpeed;
-
-
-
-
-    void Start ()
-    {
-    
-    }
-    
-    void Update ()
-    {
-    
-    }
 }
