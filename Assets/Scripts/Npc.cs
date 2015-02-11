@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Npc : MonoBehaviour
 {
-    enum NpcState { Idle, Arrive, Wander, Flee };
+    Mode implementationMode;
+    enum NpcState { Idle, Arrive, Wander, Flee, Tagged };
     [SerializeField]
     NpcState currentState = NpcState.Idle;
 
@@ -13,13 +14,73 @@ public class Npc : MonoBehaviour
     public float ArriveRadius;
     public float DistanceThreshold;
 
+    // Kinematic flee
+    public float FleeSpeed;
+    public float FleeDistanceThreshold;
+
+
+
+    // Steering seek and arrive
+    public float MaxAcceleration;
+    public float MaxVelocity;
+    public Vector3 Velocity;
+    public float TimeToTarget;
+
+    // Align
+    public float MaxAngularVelocity;
+    public float SlowAngularVelocity;
+    public float AngularVelocity;
+    public float AngularTimetoTarget;
+
     // Turning
     public float ArcAngle;
     public float ArcDistance;
     public float AngularSpeed;
     public float AngleThreshold;
 
-    // Kinematic flee
-    public float FleeSpeed;
-    public float FleeDistanceThreshold;
+    public Transform RotationTarget;
+
+
+    void Start()
+    {
+        implementationMode = GameObject.FindGameObjectWithTag("Settings").GetComponent<Mode>();
+    }
+
+    public bool IsKinematicMode()
+    {
+        return implementationMode.IsKinematic();
+    }
+
+    public bool IsSteeringMode()
+    {
+        return implementationMode.IsSteering();
+    }
+
+    void FixedUpdate()
+    {
+
+        if(IsSteeringMode())
+        {
+            // Translate
+            if(Velocity.magnitude > MaxVelocity)
+            {
+                Velocity = Velocity.normalized * MaxVelocity;
+            }
+            transform.position += Velocity * Time.deltaTime;
+
+            // Rotate
+
+            if(RotationTarget != null)
+            {
+                if(AngularVelocity > MaxAngularVelocity)
+                {
+                    AngularVelocity = MaxAngularVelocity;
+                }
+                Vector3 toTarget = RotationTarget.position - transform.position;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(toTarget), AngularVelocity * Time.deltaTime);
+            }
+
+
+        }
+    }
 }

@@ -3,13 +3,13 @@ using System.Collections;
 
 public class Mode : MonoBehaviour
 {
-    enum MovementMode { Kinematic, Steering };
+    enum ImplementationMode { Kinematic, Steering };
     [SerializeField]
-    MovementMode mode;
+    ImplementationMode mode;
 
     void Start ()
     {
-        mode = MovementMode.Kinematic;
+        mode = ImplementationMode.Kinematic;
     }
 
     void Update ()
@@ -17,17 +17,17 @@ public class Mode : MonoBehaviour
         // "Jump" is mapped to spacebar key
         if (Input.GetButtonDown ("Jump")) {
             // Change mode
-            mode = (mode == MovementMode.Kinematic) ? MovementMode.Steering : MovementMode.Kinematic;
+            mode = (mode == ImplementationMode.Kinematic) ? ImplementationMode.Steering : ImplementationMode.Kinematic;
         }
     }
 
-    bool IsKinematic ()
+    public bool IsKinematic ()
     {
-        return mode == MovementMode.Kinematic;
+        return mode == ImplementationMode.Kinematic;
     }
 
-    bool IsSteering ()
+    public bool IsSteering ()
     {
-        return mode == MovementMode.Steering;
+        return mode == ImplementationMode.Steering;
     }
 }

@@ -14,7 +14,10 @@ public class Arrive : MonoBehaviour
 
     void FixedUpdate ()
     {
-        KinematicArrive();
+        if(npc.IsKinematicMode())
+        {
+            KinematicArrive();
+        }
     }
 
     void KinematicArrive()
@@ -34,7 +37,6 @@ public class Arrive : MonoBehaviour
             else
             {
                 // Rotate towards target on the spot before moving (behavior A.ii)
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction), npc.AngularSpeed * Time.deltaTime);
             }
         }
     }

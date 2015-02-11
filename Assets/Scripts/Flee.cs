@@ -14,7 +14,10 @@ public class Flee : MonoBehaviour
     
     void FixedUpdate ()
     {
-        KinematicFlee();
+        if(npc.IsKinematicMode())
+        {
+            KinematicFlee();
+        }
     }
     
     void KinematicFlee()
