@@ -18,6 +18,10 @@ public class Flee : MonoBehaviour
         {
             KinematicFlee();
         }
+        else
+        {
+            SteeringFlee();
+        }
     }
     
     void KinematicFlee()
@@ -39,4 +43,10 @@ public class Flee : MonoBehaviour
         // Rotation for both behaviors
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(fleeDirection), npc.AngularSpeed * Time.deltaTime);
     }
+
+    void SteeringFlee()
+    {
+
+    }
+
 }

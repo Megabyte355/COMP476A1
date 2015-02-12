@@ -52,7 +52,12 @@ public class Arrive : MonoBehaviour
     void SteeringArrive()
     {
         Vector3 direction = target.position - transform.position;
-        if(velocity.magnitude < npc.VelocityThreshold)
+
+        if(direction.magnitude < npc.DistanceThreshold)
+        {
+            transform.position = target.position;
+        }
+        else if(velocity.magnitude < npc.VelocityThreshold)
         {
             // Behavior A
             if(direction.magnitude <= npc.DistanceThreshold)
@@ -62,34 +67,52 @@ public class Arrive : MonoBehaviour
             }
             else
             {
-                // rotate then translate
-                //float angularSpeed = npc.AngularVelocity;
-                //transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction), angularSpeed * Time.deltaTime);
+                // Rotate then translate (behavior A.ii)
+            
                 Align (direction);
+
+                if(Vector3.Angle (transform.forward, direction) <= npc.AngleThreshold)
+                {
+                    Vector3 acceleration = npc.MaxAcceleration * direction.normalized;
+                    velocity += acceleration * Time.deltaTime;
+                    if(velocity.magnitude > npc.MaxAcceleration)
+                    {
+                        velocity = velocity.normalized * npc.MaxAcceleration;
+                    }
+                    transform.Translate (transform.forward * velocity.magnitude * Time.deltaTime, Space.World);
+                }
             }
         }
         else
         {
             // Behavior B
+            if(Vector3.Angle (transform.forward, direction) <= npc.ArcAngle)
+            {
+                // Move while turning (behavior B.i)
+                Vector3 acceleration;
+                if(direction.magnitude < npc.SlowDownRadius)
+                {
+                    float goalVelocity = npc.MaxVelocity * direction.magnitude / npc.SlowDownRadius;
+                    float acc = (goalVelocity - velocity.magnitude) / npc.TimeToTarget;
+                    acceleration = acc * direction.normalized;
+                }
+                else
+                {
+                    acceleration = npc.MaxAcceleration * direction.normalized;
+                }
+
+                velocity += acceleration * Time.deltaTime;
+                if(velocity.magnitude > npc.MaxAcceleration)
+                {
+                    velocity = velocity.normalized * npc.MaxAcceleration;
+                }
+
+                transform.Translate (transform.forward * velocity.magnitude * Time.deltaTime, Space.World);
+            }
+
+            // Turn to target before moving (behavior B.ii)
+            Align (direction);
         }
-//
-//        if(direction.magnitude > npc.ArriveRadius)
-//        {
-//            if(Vector3.Angle (transform.forward, direction) <= npc.ArcAngle)
-//            {
-//                // Translate while rotating (behavior B.i)
-//                npc.Velocity += npc.MaxAcceleration * direction.normalized * Time.deltaTime;
-//            }
-//            // Rotate towards target (behavior B.ii, if no translation occurs)
-//            
-//            
-//            if(npc.RotationTarget != target)
-//            {
-//                npc.RotationTarget = target;
-//            }
-//            //npc.AngularVelocity += npc.MaxAngularVelocity * Time.deltaTime;
-//            //transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction), npc.AngularSpeed * Time.deltaTime);
-//        }
     }
 
     void Align(Vector3 targetAlignment)
