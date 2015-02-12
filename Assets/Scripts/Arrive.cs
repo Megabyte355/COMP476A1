@@ -68,7 +68,6 @@ public class Arrive : MonoBehaviour
             else
             {
                 // Rotate then translate (behavior A.ii)
-            
                 Align (direction);
 
                 if(Vector3.Angle (transform.forward, direction) <= npc.AngleThreshold)
@@ -109,7 +108,6 @@ public class Arrive : MonoBehaviour
 
                 transform.Translate (transform.forward * velocity.magnitude * Time.deltaTime, Space.World);
             }
-
             // Turn to target before moving (behavior B.ii)
             Align (direction);
         }
