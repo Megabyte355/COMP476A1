@@ -12,6 +12,7 @@ public class Npc : MonoBehaviour
     public float SeekSpeed;
     public float ArriveSpeed;
     public float ArriveRadius;
+    public float TimeToTarget;
     public float DistanceThreshold;
 
     // Kinematic flee
@@ -23,14 +24,16 @@ public class Npc : MonoBehaviour
     // Steering seek and arrive
     public float MaxAcceleration;
     public float MaxVelocity;
-    public Vector3 Velocity;
-    public float TimeToTarget;
+    public Vector3 Velocity;    // TODO: remove
+    public float VelocityThreshold;
+    public float SlowDownRadius;
 
     // Align
+    public float MaxAngularAcceleration;
     public float MaxAngularVelocity;
-    public float SlowAngularVelocity;
-    public float AngularVelocity;
-    public float AngularTimetoTarget;
+    public float AngularVelocity;   // TODO : remove
+    public float AngularTimeToTarget;
+    public float SlowDownOrientation;
 
     // Turning
     public float ArcAngle;
@@ -38,6 +41,8 @@ public class Npc : MonoBehaviour
     public float AngularSpeed;
     public float AngleThreshold;
 
+
+    // TODO : maybe we should remove this
     public Transform RotationTarget;
 
 
@@ -56,31 +61,31 @@ public class Npc : MonoBehaviour
         return implementationMode.IsSteering();
     }
 
-    void FixedUpdate()
-    {
-
-        if(IsSteeringMode())
-        {
-            // Translate
-            if(Velocity.magnitude > MaxVelocity)
-            {
-                Velocity = Velocity.normalized * MaxVelocity;
-            }
-            transform.position += Velocity * Time.deltaTime;
-
-            // Rotate
-
-            if(RotationTarget != null)
-            {
-                if(AngularVelocity > MaxAngularVelocity)
-                {
-                    AngularVelocity = MaxAngularVelocity;
-                }
-                Vector3 toTarget = RotationTarget.position - transform.position;
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(toTarget), AngularVelocity * Time.deltaTime);
-            }
-
-
-        }
-    }
+//    void FixedUpdate()
+//    {
+//
+//        if(IsSteeringMode())
+//        {
+//            // Translate
+//            if(Velocity.magnitude > MaxVelocity)
+//            {
+//                Velocity = Velocity.normalized * MaxVelocity;
+//            }
+//            transform.position += Velocity * Time.deltaTime;
+//
+//            // Rotate
+//
+//            if(RotationTarget != null)
+//            {
+//                if(AngularVelocity > MaxAngularVelocity)
+//                {
+//                    AngularVelocity = MaxAngularVelocity;
+//                }
+//                Vector3 toTarget = RotationTarget.position - transform.position;
+//                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(toTarget), AngularVelocity * Time.deltaTime);
+//            }
+//
+//
+//        }
+//    }
 }
